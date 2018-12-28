@@ -1,0 +1,107 @@
+
+{% extends 'base_main.html' %}
+
+{% block title %}
+    天天生鲜首页
+{% endblock %}
+
+
+{% block js %}
+	<script type="text/javascript" src="/static/js/jquery-1.12.4.min.js"></script>
+	<script type="text/javascript" src="/static/js/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="/static/js/slide.js"></script>
+{% endblock %}
+
+{% block content %}
+	<div class="navbar_con">
+		<div class="navbar">
+			<h1 class="fl">全部商品分类</h1>
+			<ul class="navlist fl">
+				<li><a href="/goods/index/">首页</a></li>
+				<li class="interval">|</li>
+				<li><a href="">手机生鲜</a></li>
+				<li class="interval">|</li>
+				<li><a href="">抽奖</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="center_con clearfix">
+		<ul class="subnav fl">
+			<li><a href="/goods/category/1/1/" class="fruit">新鲜水果</a></li>
+			<li><a href="/goods/category/2/1/" class="seafood">海鲜水产</a></li>
+			<li><a href="/goods/category/3/1/" class="meet">猪牛羊肉</a></li>
+			<li><a href="/goods/category/4/1/" class="egg">禽类蛋品</a></li>
+			<li><a href="/goods/category/5/1/" class="vegetables">新鲜蔬菜</a></li>
+			<li><a href="/goods/category/6/1/" class="ice">速冻食品</a></li>
+		</ul>
+		<div class="slide fl">
+			<ul class="slide_pics">
+				<li><img src="/static/images/slide.jpg" alt="幻灯片"></li>
+				<li><img src="/static/images/slide02.jpg" alt="幻灯片"></li>
+				<li><img src="/static/images/slide03.jpg" alt="幻灯片"></li>
+				<li><img src="/static/images/slide04.jpg" alt="幻灯片"></li>
+			</ul>
+			<div class="prev"></div>
+			<div class="next"></div>
+			<ul class="points"></ul>
+		</div>
+		<div class="adv fl">
+			<a href="#"><img src="/static/images/adv01.jpg"></a>
+			<a href="#"><img src="/static/images/adv02.jpg"></a>
+		</div>
+	</div>
+	<div class="list_model" style="height: auto">
+		<div class="list_title clearfix">
+			<h3 class="fl">{{ key.1 }}</h3>
+			<!--<div class="subtitle fl">-->
+				<!--<span>|</span>-->
+				<!--<a href="#">鲜芒</a>-->
+				<!--<a href="#">加州提子</a>-->
+				<!--<a href="#">亚马逊牛油果</a>-->
+			<!--</div>-->
+		</div>
+
+		<div class="goods_con clearfix" style="height: auto;    position: relative;left: -25px;">
+{#			<div class="goods_banner fl"><img src="/media/{{ value.0.category.category_front_image }}"></div>#}
+			<ul class="goods_list1 fl">
+                {% for goods in goods_list %}
+                    <li><h4><a href="{% url 'goods:detail' goods.id %}">{{ goods.name }}</a></h4>
+                        <a href="{% url 'goods:detail' goods.id %}"><img src="{{ goods.goods_front_image }}"></a>
+                        <div class="prize">¥ {{ goods.shop_price }}</div>
+                    </li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+
+    <div class="pagenation">
+        <aside class="paging">
+            {% if page > 1 %}
+            <a href="/goods/search/{{ name }}/1/">首页</a>
+            <a href="/goods/search/{{ name }}/{{ page|add:-1 }}/">上一页</a>
+            {% endif %}
+            {% for page_num in page_list %}
+                {% if page_num == page %}
+                <a href="javascript:;" style="background-color: #fff;color: #43a200"> {{ page_num }} </a>
+                {% else %}
+                <a href="/goods/search/{{ name }}/{{ page_num }}/"> {{ page_num }} </a>
+                {% endif %}
+            {% endfor %}
+            {% if page < max_page %}
+                <a href="/goods/search/{{ name }}/{{ page|add:1 }}">下一页</a>
+            {% endif %}
+            <a href="/goods/search/{{ name }}/{{ max_page }}/">最后一页</a>
+        <a style="width: 160px;">当前在第<input type="text" value="{{ page }}" style="width: 30px" id="jump_page">页 <button onclick="jump()">跳转</button></a>
+        <script>
+            function jump() {
+                var jump_page = parseInt($('#jump_page').val())
+                if (jump_page>0 && jump_page <= {{ max_page }})
+                    window.location.href = '/goods/search/{{ name }}/'+jump_page+'/'
+            }
+        </script>
+        </aside>
+    </div>
+
+
+{% endblock %}
